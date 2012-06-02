@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerChatEvent;
@@ -64,7 +65,7 @@ public class Events implements Listener {
 			// plugin.info("distance " + dist);
 			if (dist < 0.1) {
 			//	plugin.info("onItemSpawn " + event.getEntity().getType());
-			//	plugin.info("getEntityId " + event.getEntity().getEntityId());
+			//	plugin.info("onItemSpawn " + event.getEntity().getEntityId());
 
 				// Item x = event.getEntity();
 
@@ -76,6 +77,7 @@ public class Events implements Listener {
 
 	}
 
+	
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
 		if (event.isCancelled())
@@ -90,18 +92,21 @@ public class Events implements Listener {
 			// event.getItem().getEntityId() + " " + (info.protectionExpires -
 			// MyDrops.getUnixTime()));
 
-			if (info.playerName.equalsIgnoreCase(event.getPlayer().getName()))
+			if (info.playerName.equalsIgnoreCase(event.getPlayer().getName())){
+				playerDrops.remove(x);
 				return;
+			}
+			if (plugin.hasPermission(event.getPlayer(), "mydrops.excempt")){
+				playerDrops.remove(x);
+				return;
+			}
 			
-			if (plugin.hasPermission(event.getPlayer(), "mydrops.excempt"))
-				return;
-
 			if (MyDrops.getUnixTime() < info.protectionExpires) {
 				event.setCancelled(true);
 				return;
 			}
 
-			playerDrops.remove(x);
+			
 			
 		}
 
