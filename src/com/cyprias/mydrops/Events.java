@@ -101,6 +101,8 @@ public class Events implements Listener {
 				return;
 			}
 
+			playerDrops.remove(x);
+			
 		}
 
 	}
