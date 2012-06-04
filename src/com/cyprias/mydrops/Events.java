@@ -96,7 +96,7 @@ public class Events implements Listener {
 				playerDrops.remove(x);
 				return;
 			}
-			if (plugin.hasPermission(event.getPlayer(), "mydrops.excempt")){
+			if (plugin.hasPermission(event.getPlayer(), "mydrops.exempt")){
 				playerDrops.remove(x);
 				return;
 			}
