@@ -21,9 +21,11 @@ public class Config {
 	}
 	
 	public static int protectDuration;
+	public static boolean checkNewVersionOnStartup;
 	
 	private void loadConfigOpts(){
 		protectDuration = config.getInt("protectDuration");
+		checkNewVersionOnStartup =config.getBoolean("checkNewVersionOnStartup");
 	}
 	
 }

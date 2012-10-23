@@ -18,6 +18,8 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.cyprias.mydrops.VersionChecker.VersionCheckerEvent;
+
 public class Events implements Listener {
 	private MyDrops plugin;
 
@@ -30,8 +32,8 @@ public class Events implements Listener {
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerDeath(PlayerDeathEvent event) {
-		
-		if (plugin.hasPermission(event.getEntity(), "mydrops.protect")){
+
+		if (plugin.hasPermission(event.getEntity(), "mydrops.protect")) {
 			lastDeathLoc = event.getEntity().getLocation();
 			lastDeathPlayer = event.getEntity();
 		}
@@ -62,7 +64,7 @@ public class Events implements Listener {
 
 		if (lastDeathLoc != null && lastDeathLoc.getWorld().equals(event.getEntity().getWorld())) {
 			double dist = event.getEntity().getLocation().distance(lastDeathLoc);
-			// plugin.info("distance " + dist);
+		//	plugin.info("distance " + dist);
 			if (dist < 0.1) {
 			//	plugin.info("onItemSpawn " + event.getEntity().getType());
 			//	plugin.info("onItemSpawn " + event.getEntity().getEntityId());
@@ -77,7 +79,18 @@ public class Events implements Listener {
 
 	}
 
-	
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onItemDespawn(ItemDespawnEvent event) {
+		if (event.isCancelled())
+			return;
+
+		Item item = event.getEntity();
+		if (playerDrops.containsKey(item)) {
+		//	plugin.info("Removing " + item.getType());
+			playerDrops.remove(item);
+		}
+	}
+
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
 		if (event.isCancelled())
@@ -88,28 +101,47 @@ public class Events implements Listener {
 		if (playerDrops.containsKey(x)) {
 
 			dropInfo info = playerDrops.get(x);
-			// plugin.info("onPlayerPickupItem2 " + event.getPlayer() + " " +
-			// event.getItem().getEntityId() + " " + (info.protectionExpires -
-			// MyDrops.getUnixTime()));
+			//plugin.info("onPlayerPickupItem2 " + event.getPlayer() + " " + event.getItem().getEntityId() + " "
+			//	+ (info.protectionExpires - MyDrops.getUnixTime()));
 
-			if (info.playerName.equalsIgnoreCase(event.getPlayer().getName())){
-				playerDrops.remove(x);
+			if (info.playerName.equalsIgnoreCase(event.getPlayer().getName())) {
+				// playerDrops.remove(x);
 				return;
 			}
-			if (plugin.hasPermission(event.getPlayer(), "mydrops.exempt")){
-				playerDrops.remove(x);
+			if (plugin.hasPermission(event.getPlayer(), "mydrops.exempt")) {
+				// playerDrops.remove(x);
 				return;
 			}
-			
+
 			if (MyDrops.getUnixTime() < info.protectionExpires) {
 				event.setCancelled(true);
 				return;
 			}
 
-			
-			
 		}
 
 	}
 
+	@EventHandler(priority = EventPriority.NORMAL)
+	public void onVersionCheckerEvent(VersionCheckerEvent event) {
+		if (event.getPluginName() == plugin.getName()) {
+			VersionChecker.versionInfo info = event.getVersionInfo(0);
+			Object[] args = event.getArgs();
+
+			String curVersion = plugin.getDescription().getVersion();
+
+			if (args.length == 0) {
+
+				int compare = VersionChecker.compareVersions(curVersion, info.getTitle());
+				// plugin.info("curVersion: " + curVersion +", title: " +
+				// info.getTitle() + ", compare: " + compare);
+				if (compare < 0) {
+					plugin.info("We're running v" + curVersion + ", v" + info.getTitle() + " is available");
+					plugin.info(info.getLink());
+				}
+
+				return;
+			}
+		}
+	}
 }
