@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mcstats.Metrics;
 
 public class MyDrops  extends JavaPlugin {
 	String pluginName;
@@ -19,9 +20,8 @@ public class MyDrops  extends JavaPlugin {
 		this.config = new Config(this);
 		this.events = new Events(this);
 		
-		this.versionChecker = new VersionChecker(this, "http://dev.bukkit.org/server-mods/mydrops/files.rss");
 		if (Config.checkNewVersionOnStartup == true)
-			this.versionChecker.retreiveVersionInfo();
+			VersionChecker.retreiveVersionInfo(this, "http://dev.bukkit.org/server-mods/mydrops/files.rss");
 		
 		try {
 		    Metrics metrics = new Metrics(this);
