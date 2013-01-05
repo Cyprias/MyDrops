@@ -1,2 +1,4 @@
 protectDuration: 300
 checkNewVersionOnStartup: true
+debugMessages: false
+protectRadius: 1.5

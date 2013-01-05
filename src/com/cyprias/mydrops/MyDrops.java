@@ -2,8 +2,7 @@ package com.cyprias.mydrops;
 
 import java.io.IOException;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.Server;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 
@@ -13,12 +12,15 @@ public class MyDrops  extends JavaPlugin {
 	public Config config;
 	public Events events;
 	public VersionChecker versionChecker;
+	private static Server server;
 	
 	public void onEnable() {
 		pluginName = getDescription().getName();
 		
 		this.config = new Config(this);
 		this.events = new Events(this);
+		
+		this.server = getServer();
 		
 		if (Config.checkNewVersionOnStartup == true)
 			VersionChecker.retreiveVersionInfo(this, "http://dev.bukkit.org/server-mods/mydrops/files.rss");
@@ -31,8 +33,8 @@ public class MyDrops  extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(this.events, this);
 	}
 	
-	public void info(String msg) {
-		getServer().getConsoleSender().sendMessage(chatPrefix + msg);
+	static public void info(String msg) {
+		server.getConsoleSender().sendMessage(chatPrefix + msg);
 	}
 
 	
@@ -40,29 +42,4 @@ public class MyDrops  extends JavaPlugin {
 		return (System.currentTimeMillis() / 1000D);
 	}
 	
-	public boolean hasPermission(CommandSender sender, String node) {
-		if (!(sender instanceof Player)) {
-			return true;
-		}
-		Player player = (Player) sender;
-
-		if (player.isPermissionSet(node)) // in case admin purposely set the
-											// node to false.
-			return player.hasPermission(node);
-
-		if (player.isPermissionSet(pluginName.toLowerCase() + ".*"))
-			return player.hasPermission(pluginName.toLowerCase() + ".*");
-
-		String[] temp = node.split("\\.");
-		String wildNode = temp[0];
-		for (int i = 1; i < (temp.length); i++) {
-			wildNode = wildNode + "." + temp[i];
-
-			if (player.isPermissionSet(wildNode + ".*"))
-				// plugin.info("wildNode1 " + wildNode+".*");
-				return player.hasPermission(wildNode + ".*");
-		}
-
-		return player.hasPermission(node);
-	}
 }

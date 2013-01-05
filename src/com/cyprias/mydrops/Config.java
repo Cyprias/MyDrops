@@ -21,11 +21,14 @@ public class Config {
 	}
 	
 	public static int protectDuration;
-	public static boolean checkNewVersionOnStartup;
+	public static boolean checkNewVersionOnStartup, debugMessages;
+	public static double protectRadius;
 	
 	private void loadConfigOpts(){
 		protectDuration = config.getInt("protectDuration");
 		checkNewVersionOnStartup =config.getBoolean("checkNewVersionOnStartup");
+		debugMessages = config.getBoolean("debugMessages");
+		protectRadius = config.getDouble("protectRadius");
 	}
 	
 }
