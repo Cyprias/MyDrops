@@ -7,7 +7,11 @@ permissions:
         description: Grant all access.
         default: false
         children:
+            mydrops.protect: true
             mydrops.exempt: true
+    mydrops.protect:
+        description: Protect items dropped by this player.
+        default: false
     mydrops.exempt:
         description: Allow these players to pickup protected items.
         default: false
