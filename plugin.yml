@@ -1,6 +1,6 @@
 name: MyDrops
 main: com.cyprias.mydrops.MyDrops
-version: 0.5.0
+version: 0.5.1
 
 permissions:
     mydrops.*:
