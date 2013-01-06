@@ -79,6 +79,7 @@ public class Events implements Listener {
 
 		public DropInfo(Player lastDeathPlayer) {
 			this.owner = lastDeathPlayer;
+			this.time = MyDrops.getUnixTime();
 			// TODO Auto-generated constructor stub
 		}
 
@@ -214,7 +215,7 @@ public class Events implements Listener {
 				return;
 			}
 
-			if (MyDrops.getUnixTime() < (playerDrops.get(item).getDropTime() - Config.protectDuration)) {
+			if (MyDrops.getUnixTime() < (playerDrops.get(item).getDropTime() + Config.protectDuration)) {
 				if (Config.debugMessages)
 					MyDrops.info("Blocking " + player.getName() + " from picking up " + playerDrops.get(item).getOwner().getName() + "'s " + item.getType()
 						+ "(" + item.getEntityId() + ")");
