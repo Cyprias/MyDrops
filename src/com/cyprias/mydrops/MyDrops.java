@@ -1,6 +1,7 @@
 package com.cyprias.mydrops;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import org.bukkit.Server;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -16,11 +17,12 @@ public class MyDrops  extends JavaPlugin {
 	
 	public void onEnable() {
 		pluginName = getDescription().getName();
+		MyDrops.server = getServer();
 		
 		this.config = new Config(this);
 		this.events = new Events(this);
 		
-		this.server = getServer();
+		
 		
 		if (Config.checkNewVersionOnStartup == true)
 			VersionChecker.retreiveVersionInfo(this, "http://dev.bukkit.org/server-mods/mydrops/files.rss");
@@ -33,8 +35,9 @@ public class MyDrops  extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(this.events, this);
 	}
 	
-	static public void info(String msg) {
-		server.getConsoleSender().sendMessage(chatPrefix + msg);
+	private static Logger log = Logger.getLogger("Minecraft");
+	public static void info(String msg) {
+		log.info(chatPrefix + msg);
 	}
 
 	

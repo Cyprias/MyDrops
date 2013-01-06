@@ -11,6 +11,7 @@ import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.cyprias.mydrops.VersionChecker.VersionCheckerEvent;
@@ -109,17 +110,26 @@ public class Events implements Listener {
 
 		Item item = event.getEntity();
 
+		ItemStack is = item.getItemStack();
 		
+
+		if (Config.isBlacklsited(is)){
+			if (Config.debugMessages)
+				MyDrops.info(event.getEventName()+" ignoring item " + is.getType() + "(" + item.getEntityId() + ")");
+			return;
+		}
 		
-		if (Config.debugMessages)
-			MyDrops.info(event.getEventName()+" " + item.getType() + "(" + item.getEntityId() + ") = " + playerDrops.containsKey(item));
+		/*if (Config.debugMessages){
+			MyDrops.info(event.getEventName()+"1 " + is.getType() + "(" + item.getEntityId() + ") = " + playerDrops.containsKey(item));
+			MyDrops.info(event.getEventName()+"2 " + is.getType());
+		}*/
 		
 		if (lastDeath != null && lastDeath.getLocation().getWorld().equals(item.getWorld()) && (lastDeath.getTime()+1 >= (MyDrops.getUnixTime()))) {// 
 			double dist = event.getEntity().getLocation().distance(lastDeath.getLocation());
 			if (dist < Config.protectRadius) {
 
 				if (Config.debugMessages)
-					MyDrops.info("Protecting " + lastDeath.getPlayer().getName() + "'s " + item.getType() + "(" + item.getEntityId() + ")");
+					MyDrops.info("Protecting " + lastDeath.getPlayer().getName() + "'s " + is.getType() + "(" + item.getEntityId() + ")");
 
 				playerDrops.put(item, new DropInfo(lastDeath.getPlayer()));
 			//} else {
