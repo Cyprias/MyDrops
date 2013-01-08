@@ -219,7 +219,7 @@ public class Events implements Listener {
 				return;
 			}
 
-			if (playerDrops.get(item).getOwner().equals(player)) {
+			if (playerDrops.get(item).getOwner().getName().equals(player.getName())) {
 				if (Config.debugMessages)
 					MyDrops.info("Allowing " + player.getName() + " to pickup " + item.getType() + "(" + item.getEntityId() + ")");
 				return;
