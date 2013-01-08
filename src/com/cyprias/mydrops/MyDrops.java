@@ -1,9 +1,11 @@
 package com.cyprias.mydrops;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Logger;
 
 import org.bukkit.Server;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 
@@ -19,7 +21,12 @@ public class MyDrops  extends JavaPlugin {
 		pluginName = getDescription().getName();
 		MyDrops.server = getServer();
 		
-		this.config = new Config(this);
+		try {
+			this.config = new Config(this);
+		} catch (FileNotFoundException e1) {e1.printStackTrace();
+		} catch (IOException e1) {e1.printStackTrace();
+		} catch (InvalidConfigurationException e1) {e1.printStackTrace();
+		}
 		this.events = new Events(this);
 		
 		

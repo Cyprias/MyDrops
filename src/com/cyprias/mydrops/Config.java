@@ -1,5 +1,7 @@
 package com.cyprias.mydrops;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -7,13 +9,14 @@ import java.util.List;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.inventory.ItemStack;
 
 public class Config {
 	private static MyDrops plugin;
 	private static Configuration config;
 	
-	public Config(MyDrops plugin) {
+	public Config(MyDrops plugin) throws FileNotFoundException, IOException, InvalidConfigurationException {
 		this.plugin = plugin;
 		config = plugin.getConfig().getRoot();
 		config.options().copyDefaults(true);
@@ -21,7 +24,7 @@ public class Config {
 		reloadOurConfig();
 	}
 
-	public void reloadOurConfig(){
+	public void reloadOurConfig() throws FileNotFoundException, IOException, InvalidConfigurationException{
 		plugin.reloadConfig();
 		config = plugin.getConfig().getRoot();
 		loadConfigOpts();
@@ -31,7 +34,7 @@ public class Config {
 	public static boolean checkNewVersionOnStartup, debugMessages;
 	public static double protectRadius;
 	
-	private void loadConfigOpts(){
+	private void loadConfigOpts() throws FileNotFoundException, IOException, InvalidConfigurationException{
 		protectDuration = config.getInt("protectDuration");
 		checkNewVersionOnStartup =config.getBoolean("checkNewVersionOnStartup");
 		debugMessages = config.getBoolean("debugMessages");
@@ -52,7 +55,7 @@ public class Config {
 		return false;
 	}
 	
-	private static void loadBlacklist(){
+	private static void loadBlacklist() throws FileNotFoundException, IOException, InvalidConfigurationException{
 		blacklistedItems.clear();
 		
 		YML yml = new YML(plugin.getResource("blacklist.yml"),plugin.getDataFolder(), "blacklist.yml");

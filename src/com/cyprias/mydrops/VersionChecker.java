@@ -30,9 +30,8 @@ public class VersionChecker {
 		while (aParts.length > i && bParts.length > i) {
 			aInt = Integer.parseInt(aParts[i]);
 			bInt = Integer.parseInt(bParts[i]);
-			if (aInt != bInt){
+			if (aInt != bInt)
 				return aInt - bInt;
-			}
 			i+=1;
 		}
 		return 0;
@@ -156,10 +155,7 @@ public class VersionChecker {
 		}
 
 		public versionInfo getVersionInfo(int index) {
-			if (versions.size() >= (index+1))
-				return versions.get(index);
-			
-			return null;
+			return (versions.size() >= (index+1)) ? versions.get(index) : null;
 		}
 
 		public Object[] getArgs(){
